@@ -21,7 +21,7 @@ int compareflag(char c)//查看c是不是运算符
 	return 0;
 }
 
-int com(char a1,char a2)//用于比较两个计算符的优先级，a                                                1是flag栈顶的符号，a2是待比较的符号 
+int com(char a1,char a2)//用于比较两个计算符的优先级，a1是flag栈顶的符号，a2是待比较的符号 
 {
 	int i, j;
 	for(i=0;i<9;i++)
@@ -51,7 +51,7 @@ int main()
 	char c1;//一个一个输 
 	char total[20]={'\0'};//存储完整的数字字符串 
 	int data;//存要压入栈的数
-	cout<<"please input expresssion,end with '=' ";
+	cout<<"please input expresssion,end with '=' "<<endl;
 	c1=getchar();
 	char word[2];
 	while(c1!='='||flag.top()!='=')
