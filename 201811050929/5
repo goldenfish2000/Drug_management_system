@@ -1,0 +1,172 @@
+#include <iostream>
+#include "MyStack.h"
+using namespace std;
+template <class Stack_entry>
+MyStack<Stack_entry>::MyStack()
+{
+    count = 0;
+}
+template <class Stack_entry>
+bool MyStack<Stack_entry>::empty() const
+
+{
+    bool outcome = true;
+    if (count > 0) outcome = false;
+    return outcome;
+}
+template <class Stack_entry>
+Error_code MyStack<Stack_entry>::push(const Stack_entry &item)
+{
+    Error_code outcome = success;
+    if (count >= maxstack) outcome = overflow;
+    else entry[count++] = item;
+    return outcome;
+}
+template <class Stack_entry>
+Error_code MyStack<Stack_entry>::pop()
+{
+    Error_code outcome = success;
+    if (count == 0) outcome = underflow;
+    else --count;
+    return outcome;
+}
+template <class Stack_entry>
+Error_code MyStack<Stack_entry>::top(Stack_entry &item) const
+
+{
+    Error_code outcome = success;
+    if (count == 0) outcome = underflow;
+    else item = entry[count - 1];
+    return outcome;
+}
+template <class Stack_entry>
+Stack_entry MyStack<Stack_entry>::top()const
+{
+    if (count == 0) underflow;
+    return entry[count - 1];
+}
+template <class Stack_entry>
+void MyStack<Stack_entry>::setnull()
+{
+    count = 0;
+}
+#include <iostream>
+#include "MyStack.cpp"
+#include "Calculator.h"
+#include <ctype.h>
+using namespace std;
+void Calculator::evaluate()
+{
+    char ch, op, theta;
+    double val, a, b;
+    cin >> ch;
+    op = '#';
+    bool is_matched = true;
+    do
+    {
+        while (isalpha(ch)) { cin >> ch; }
+        is_matched = true;
+
+        switch (ch)
+        {
+        case '(': bracket.push(ch); break;
+        case ')': if (bracket.empty())
+            is_matched = false;
+                  else
+                  {
+                      bracket.pop();  is_matched = true;
+                  }
+                  break;
+        default: break;
+        }
+        while (is_matched)
+        {
+            if (isdigit(ch))
+            {
+                cin.putback(ch);
+                cin >> val;
+                opnd.push(val);
+                cin >> ch; break;
+            }
+            else if (lp(op) < rp(ch))
+            {
+                optr.push(ch);
+                op = optr.top();
+                cin >> ch; break;
+            }
+            else if (lp(op) == rp(ch))
+            {
+                optr.pop();
+                op = optr.top();
+                cin >> ch; break;
+            }
+            else if (lp(op) > rp(ch))
+            {
+                theta = op;  optr.pop();
+                b = opnd.top();  opnd.pop();
+                a = opnd.top();  opnd.pop();
+                opnd.push(operate(theta, a, b));
+                op = optr.top();
+                if ((ch == ')') && (op == '('))
+                {
+                    optr.pop();  op = optr.top();
+                    cin >> ch;
+                    if (ch == '(') is_matched = false;
+                }
+                break;
+            }
+        }
+        if (is_matched == false || (op == '(' && ch == '#'))
+        {
+            cout << "Bad match." << endl;
+            ch = op = '#';
+            is_matched = false;
+        }
+    } while (ch != '#' || op != '#');
+
+    if (is_matched == true) cout << '=' << opnd.top();
+    else {
+        cout << "sorry, cannot compute this expression." << endl;
+    }
+}
+int Calculator::lp(char op)
+{
+    int prior;
+    switch (op)
+    {
+    case '+':
+    case '-': prior = 3; break;
+    case '*':
+    case '/': prior = 5; break;
+    case '(': prior = 1; break;
+    case ')': prior = 6; break;
+    case '#': prior = 0; break;
+    }
+    return prior;
+}
+int Calculator::rp(char op)
+{
+    int prior;
+    switch (op)
+    {
+    case '+':
+    case '-': prior = 2; break;
+    case '*':
+    case '/': prior = 4; break;
+    case '(': prior = 6; break;
+    case ')': prior = 1; break;
+    case '#': prior = 0; break;
+    }
+    return prior;
+}
+double Calculator::operate(char theta, double a, double b)
+{
+    switch (theta)
+    {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a*b;
+    case '/': return a / b;
+    default: return 0;
+    }
+}
