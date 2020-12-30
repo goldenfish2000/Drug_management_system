@@ -1,0 +1,79 @@
+#include<iostream>
+using namespace std;
+int fun(int m, int n)
+{
+	int monkey[100];
+	int number = m;
+	int k = 0;
+	for (int i = 0; i < number; ++i) 
+	{
+		monkey[i] = 1;
+	}
+	while (number > 1) 
+	{
+		for (int i = 0; i < m; ++i)
+		{
+			if (monkey[i] == 1)
+				++k;
+			if (k == n)
+			{
+				monkey[i] = 0;
+				k = 0;
+				--number;
+			}
+		}
+	}
+	for (int j = 0; j < m; ++j) 
+	{
+		if (monkey[j] == 1)
+			return j + 1;
+	}
+}
+
+struct ListNode
+{
+	int val;
+	ListNode *next;
+};
+
+int fun2(int m, int n)
+{
+	if (n == 1)	return m;
+	ListNode monkeys[100];
+	for (int i = 0; i < m-1; ++i) 
+	{
+		monkeys[i].val = i + 1;
+		monkeys[i].next = &monkeys[i + 1];
+	}
+	monkeys[m - 1].val = m;
+	monkeys[m - 1].next = &monkeys[0];
+
+	ListNode* p = &monkeys[0];
+	while (p->next != p) 
+	{
+		for (int i = 0; i < n - 2; ++i) {
+			p = p->next;
+		}
+		p->next = p->next->next;
+		p = p->next;
+	}
+	return p->val;
+}
+
+int main()
+{
+	int m, n;
+	cout << "输入m只猴子: "; cin >> m;
+	cout << "数n个数: "; cin >> n;
+	while (n >= m  && m < 100) {
+		cout << "要求n<m 并且m<100, 请重新输入" << endl;
+		cin >> m >> n;
+	}
+	int king1, king2;
+	king1=fun(m, n);	//First
+	king2 = fun2(m, n);	//Second
+	cout << "大王是（数组）：" << king1 << endl
+		<< "大王是（链表）：" << king2 << endl;
+	system("pause");
+	return 0;
+}
