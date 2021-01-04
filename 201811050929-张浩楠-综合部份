@@ -1,0 +1,17 @@
+		void print_all_data()
+		{
+		   char qbuf[500];
+		   sprintf(qbuf, "SELECT * FROM drug;");
+		   mysql_query(&mysql, qbuf);
+		   mysql_query(&mysql, "select * from drug");//储存结果集
+		   res=mysql_store_result(&mysql);
+		   int n;
+		   n=mysql_field_count(&mysql);//获取字段数
+		   cout<<"药品编号       药品名称        生产厂家                      生产日期       保质期     用途     价格    数量       经手人"<<endl;
+		   while (row = mysql_fetch_row(res))
+		   {				  
+			for(int i=0;i<n;i++)
+				printf("%s     ",row[i]);
+				cout<<endl;		
+		   };
+		}
