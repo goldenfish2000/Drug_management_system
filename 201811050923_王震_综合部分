@@ -1,1 +1,30 @@
-
+		void drug_input_data()
+		{
+			system("cls");
+			getchar();//防止读取数据有误
+			//添加药品信息
+			cout<<"请输入要添加的药品编号"<<endl;
+			cin.getline(drug_id,10);
+			cout<<"请输入要添加的药品名称"<<endl;
+			cin.getline(drug_title,20);
+			cout<<"请输入要添加的药品生产厂家"<<endl;
+			cin.getline(Manufacturers,100);
+			cout<<"请输入要添加的药品生产日期"<<endl;
+			cin.getline(Date_of_production,50);
+			cout<<"请输入要添加的药品保质期"<<endl;
+			cin>>shelf_life;
+			getchar();//防止读取数据有误
+			cout<<"请输入要添加的药品用途"<<endl;
+			cin.getline(purposes,50);
+			cout<<"请输入要添加的药品价格"<<endl;
+			cin>>price;
+			cout<<"请输入要添加的药品数量"<<endl;
+			cin>>num;
+			getchar();//防止读取数据有误
+			cout<<"请输入要添加的药品经手人"<<endl;
+			cin.getline(hands_on,30);
+			//写入数据库
+			sprintf(qbuf, "INSERT INTO drug VALUES('%s','%s','%s','%s','%d','%s','%d','%d','%s');",drug_id,drug_title,Manufacturers,Date_of_production,shelf_life,purposes,price,num,hands_on);
+			mysql_query(&mysql, qbuf);
+		
+		};
